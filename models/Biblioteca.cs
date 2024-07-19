@@ -111,7 +111,8 @@ public class Functions
             if (libro.FechaPublicacion >= fechaMenos5Anios)
             {
                 estado = "Reciente";
-            }else
+            }
+            else
             {
                 estado = "Antiguo";
             }
@@ -120,4 +121,118 @@ public class Functions
         }
         Thread.Sleep(6000); // Espera 6 segundos antes de volver al menú
     }
+    public static void BuscarLibro()
+    {
+        Console.WriteLine("Buscar Mediante: ");
+        Console.WriteLine("(1) Autor ");
+        Console.WriteLine("(2) Genero ");
+        Console.WriteLine("(3) Rango de Publicacion ");
+
+        if (!int.TryParse(Console.ReadLine(), out int opcion))
+        {
+            Console.WriteLine("UPS!! OPCION INVALIDA, INTENTE DE NUEVO...");
+            Thread.Sleep(4000); // Espera 4 segundos antes de volver al menú
+        }
+
+        switch (opcion)
+        {
+            case 1:
+                BusquedaAutor();
+                break;
+            case 2:
+                BusquedaGenero();
+                break;
+            case 3:
+                BusquedaRangoPublicacion();
+                break;
+            default:
+                Console.WriteLine("Opción no válida. Intente de nuevo.");
+                break;
+        }
+
+        static void BusquedaAutor()
+        {
+            Console.Write("Ingrese el nombre del Autor: ");
+            string? nombreAutor = Console.ReadLine();
+
+            var librosDelAutor = libros.Where(libro => libro.Autor == nombreAutor).ToList();
+            if (librosDelAutor.Count == 0)
+            {
+                Console.WriteLine("No se encontraron libros para este Autor.");
+                Thread.Sleep(3000); // Espera 3 segundos antes de volver al menú
+                return;
+            }
+
+            Console.WriteLine($"Libros Publicados por el Autor {nombreAutor}:");
+            foreach (var libro in librosDelAutor)
+            {
+                Console.WriteLine($"Id: {libro.Id} | Fecha de Publicacion: {libro.FechaPublicacion} | Titulo: {libro.Titulo} | ISBN: {libro.ISBN} | Genero: {libro.Genero} | Precio: {libro.Precio}");
+                Thread.Sleep(200); // Espera 200 milisegundos antes de volver al menú
+            }
+            Thread.Sleep(5000); // Espera 5 segundos antes de volver al menú
+        }
+        static void BusquedaGenero()
+        {
+            Console.Write("Ingrese el nombre del Genero: ");
+            string? GeneroLibro = Console.ReadLine();
+
+            var librosGenero = libros.Where(libro => libro.Genero == GeneroLibro).ToList();
+            if (librosGenero.Count == 0)
+            {
+                Console.WriteLine("No se encontraron libros para este Autor.");
+                Thread.Sleep(3000); // Espera 3 segundos antes de volver al menú
+                return;
+            }
+
+            Console.WriteLine($"Libros registrados con el genero {GeneroLibro}:");
+            foreach (var libro in librosGenero)
+            {
+                Console.WriteLine($"Id: {libro.Id} | Fecha de Publicacion: {libro.FechaPublicacion} | Titulo: {libro.Titulo} | ISBN: {libro.ISBN} | Genero: {libro.Genero} | Precio: {libro.Precio}");
+                Thread.Sleep(200); // Espera 200 milisegundos antes de volver al menú
+            }
+            Thread.Sleep(5000); // Espera 5 segundos antes de volver al menú
+        }
+        static void BusquedaRangoPublicacion()
+        {
+            Console.Write("Ingrese la fecha de inicio (yyyy/MM/dd): ");
+            DateOnly fechaInicio;
+            if (!DateOnly.TryParseExact(Console.ReadLine(), "yyyy/MM/dd", null, System.Globalization.DateTimeStyles.None, out fechaInicio))
+            {
+                Console.WriteLine("Formato de fecha inválido. Intente de nuevo.");
+                Thread.Sleep(3000); // Espera 3 segundos antes de volver al menú
+                return;
+            }
+
+            Console.Write("Ingrese la fecha de fin (yyyy/MM/dd): ");
+            DateOnly fechaFin;
+            if (!DateOnly.TryParseExact(Console.ReadLine(), "yyyy/MM/dd", null, System.Globalization.DateTimeStyles.None, out fechaFin))
+            {
+                Console.WriteLine("Formato de fecha inválido. Intente de nuevo.");
+                Thread.Sleep(3000); // Espera 3 segundos antes de volver al menú
+                return;
+            }
+
+            var librosFiltrados = libros.Where(l => l.FechaPublicacion >= fechaInicio && l.FechaPublicacion <= fechaFin);
+            if (librosFiltrados.Count() == 0)
+            {
+                Console.WriteLine("No hay ventas registradas en ese rango de fechas.");
+                Thread.Sleep(3000); // Espera 3 segundos antes de volver al menú
+                return;
+            }
+            Console.WriteLine("Ventas filtradas por fecha:");
+            foreach (var libro in librosFiltrados)
+            {
+                Console.WriteLine($"Id: {libro.Id} | Fecha de Publicacion: {libro.FechaPublicacion} | Titulo: {libro.Titulo} | ISBN: {libro.ISBN} | Genero: {libro.Genero} | Precio: {libro.Precio}");
+                Thread.Sleep(200); // Espera 200 milisegundos antes de volver al menú
+            }
+            Thread.Sleep(5000); // Espera 5 segundos antes de volver al menú
+        }
+
+    }
+
+
+
+
+
 }
+
